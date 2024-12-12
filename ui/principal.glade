@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow" id="principale">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">FlashBox - Application principale</property>
+    <property name="default-width">900</property>
+    <property name="default-height">700</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">10</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+
+        <!-- Barre de menus -->
+        <child>
+          <object class="GtkMenuBar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <!-- Menu Fichier -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Fichier</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkMenu">
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">Quitter</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Menu Edition -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Édition</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkMenu">
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">Ajouter</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">Supprimer</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">Modifier</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Menu Aide -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Aide</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkMenu">
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">À propos</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Menu Utilisateur -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Nom d'utilisateur</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkMenu">
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">Déconnexion</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Titre principal -->
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">
+              <markup><b>Bienvenue sur FlashBox</b></markup>
+            </property>
+            <property name="xalign">0.5</property>
+            <property name="yalign">0.5</property>
+            <property name="font" translatable="yes">Arial 24</property>
+          </object>
+        </child>
+
+        <!-- Paragraphe descriptif -->
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">
+              <markup><i>FlashBox est une application pour réaliser des tests rapides et efficaces. Utilisez l'interface simple pour commencer un nouveau test en quelques clics.</i></markup>
+            </property>
+            <property name="xalign">0.5</property>
+            <property name="yalign">0.5</property>
+            <property name="width-request">600</property>
+          </object>
+        </child>
+
+        <!-- Bouton pour commencer un test -->
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">Commencer un nouveau test</property>
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+            <property name="width-request">200</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

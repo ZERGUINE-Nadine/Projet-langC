@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow" id="principale">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">FlashBox - Tableau de bord</property>
+    <property name="default-width">900</property>
+    <property name="default-height">700</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">10</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+
+        <!-- Barre de menus -->
+        <child>
+          <object class="GtkMenuBar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Fichier</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkMenu">
+                    <child>
+                      <object class="GtkMenuItem">
+                        <property name="label" translatable="yes">Quitter</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Titre principal -->
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">
+              <markup><b>Commencer un nouveau examen</b></markup>
+            </property>
+            <property name="xalign">0.5</property>
+          </object>
+        </child>
+
+        <!-- Formulaire d'informations générales -->
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="row-spacing">10</property>
+            <property name="column-spacing">10</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Nom de l'examen :</property>
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Date :</property>
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="placeholder-text" translatable="yes">JJ/MM/AAAA</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Durée estimée :</property>
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="placeholder-text" translatable="yes">En minutes</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+
+        <!-- Formulaire principal pour les questions et réponses -->
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="shadow-type">in</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="row-spacing">10</property>
+                <property name="column-spacing">10</property>
+                <!-- Génération des champs pour 10 questions et réponses -->
+                <!-- Question 1 -->
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Question 1 :</property>
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Réponse :</property>
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <!-- Vous pouvez dupliquer ces blocs pour les 9 autres questions -->
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Bouton lancer -->
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">Lancer</property>
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
