@@ -1,127 +1,177 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
 
-#define MAX_QUESTIONS 100
+#define NUM_QUESTIONS 10
 
 typedef struct {
-    GtkWidget *entry_title;
-    GtkWidget *entry_questions[MAX_QUESTIONS];
-    GtkWidget *entry_answers[MAX_QUESTIONS];
-    GtkWidget *window;
-    GtkWidget *vbox;
-    int current_questions;
-} AppWidgets;
+    GtkWidget *entry_questions[NUM_QUESTIONS];
+    GtkWidget *entry_answers[NUM_QUESTIONS];
+    GtkWidget *file_list;
+    GtkWidget *notebook;
+} AppData;
 
-void save_to_file(AppWidgets *app_wdgts) {
-    const gchar *title = gtk_entry_get_text(GTK_ENTRY(app_wdgts->entry_title));
-    FILE *file = fopen("fiche.txt", "w");
+void clear_entries(AppData *data) {
+    for (int i = 0; i < NUM_QUESTIONS; i++) {
+        gtk_entry_set_text(GTK_ENTRY(data->entry_questions[i]), "");
+        gtk_entry_set_text(GTK_ENTRY(data->entry_answers[i]), "");
+    }
+}
 
-    if (file == NULL) {
-        g_print("Erreur lors de l'ouverture du fichier.\n");
+void refresh_file_list(AppData *data) {
+    // Remove all existing rows from the list box
+    GList *children = gtk_container_get_children(GTK_CONTAINER(data->file_list));
+    for (GList *iter = children; iter != NULL; iter = g_list_next(iter)) {
+        gtk_widget_destroy(GTK_WIDGET(iter->data));
+    }
+    g_list_free(children);
+
+    // Populate the list box with files
+    DIR *dir = opendir(".");
+    if (dir) {
+        struct dirent *entry;
+        while ((entry = readdir(dir)) != NULL) {
+            if (strstr(entry->d_name, "fiche_") && strstr(entry->d_name, ".txt")) {
+                gtk_list_box_insert(GTK_LIST_BOX(data->file_list), gtk_label_new(entry->d_name), -1);
+            }
+        }
+        closedir(dir);
+    }
+    gtk_widget_show_all(GTK_WIDGET(data->file_list));
+}
+
+void load_file(GtkWidget *button, gpointer user_data) {
+    AppData *data = (AppData *)user_data;
+    GtkListBoxRow *row = gtk_list_box_get_selected_row(GTK_LIST_BOX(data->file_list));
+    if (row) {
+        GtkWidget *label = gtk_bin_get_child(GTK_BIN(row));
+        const char *filename = gtk_label_get_text(GTK_LABEL(label));
+
+        FILE *file = fopen(filename, "r");
+        if (!file) {
+            perror("Unable to open file");
+            return;
+        }
+
+        char line[256];
+        for (int i = 0; i < NUM_QUESTIONS; i++) {
+            if (fgets(line, sizeof(line), file)) {
+                gtk_entry_set_text(GTK_ENTRY(data->entry_questions[i]), strchr(line, ':') + 2);
+            }
+            if (fgets(line, sizeof(line), file)) {
+                gtk_entry_set_text(GTK_ENTRY(data->entry_answers[i]), strchr(line, ':') + 2);
+            }
+        }
+
+        fclose(file);
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(data->notebook), 0);
+    }
+}
+
+void save_file(GtkWidget *button, gpointer user_data) {
+    AppData *data = (AppData *)user_data;
+
+    // Generate a filename
+    char filename[256];
+    snprintf(filename, sizeof(filename), "fiche_%ld.txt", time(NULL));
+
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        perror("Unable to create file");
         return;
     }
 
-    fprintf(file, "Titre: %s\n\n", title);
-
-    for (int i = 0; i < app_wdgts->current_questions; i++) {
-        const gchar *question = gtk_entry_get_text(GTK_ENTRY(app_wdgts->entry_questions[i]));
-        const gchar *answer = gtk_entry_get_text(GTK_ENTRY(app_wdgts->entry_answers[i]));
-        fprintf(file, "Question %d: %s\n", i + 1, question);
-        fprintf(file, "Réponse %d: %s\n\n", i + 1, answer);
+    for (int i = 0; i < NUM_QUESTIONS; i++) {
+        const char *question = gtk_entry_get_text(GTK_ENTRY(data->entry_questions[i]));
+        const char *answer = gtk_entry_get_text(GTK_ENTRY(data->entry_answers[i]));
+        fprintf(file, "Q%d: %s\nA%d: %s\n", i + 1, question, i + 1, answer);
     }
 
     fclose(file);
-    g_print("Les données ont été sauvegardées dans 'fiche.txt'.\n");
+    refresh_file_list(data);
+    clear_entries(data);
 }
 
-void on_validate_button_clicked(GtkWidget *widget, AppWidgets *app_wdgts) {
-    save_to_file(app_wdgts);
+void delete_file(GtkWidget *button, gpointer user_data) {
+    AppData *data = (AppData *)user_data;
+    GtkListBoxRow *row = gtk_list_box_get_selected_row(GTK_LIST_BOX(data->file_list));
+    if (row) {
+        GtkWidget *label = gtk_bin_get_child(GTK_BIN(row));
+        const char *filename = gtk_label_get_text(GTK_LABEL(label));
+        if (remove(filename) == 0) {
+            gtk_widget_destroy(GTK_WIDGET(row));
+        } else {
+            perror("Unable to delete file");
+        }
+    }
 }
 
-void on_add_button_clicked(GtkWidget *widget, AppWidgets *app_wdgts) {
-    if (app_wdgts->current_questions >= MAX_QUESTIONS) {
-        g_print("Nombre maximum de questions atteint.\n");
-        return;
+void setup_page(GtkWidget *notebook, AppData *data) {
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
+
+    for (int i = 0; i < NUM_QUESTIONS; i++) {
+        char label_text[20];
+        snprintf(label_text, sizeof(label_text), "Question %d", i + 1);
+        GtkWidget *label_question = gtk_label_new(label_text);
+        GtkWidget *entry_question = gtk_entry_new();
+        GtkWidget *entry_answer = gtk_entry_new();
+
+        data->entry_questions[i] = entry_question;
+        data->entry_answers[i] = entry_answer;
+
+        gtk_grid_attach(GTK_GRID(grid), label_question, 0, i, 1, 1);
+        gtk_grid_attach(GTK_GRID(grid), entry_question, 1, i, 1, 1);
+        gtk_grid_attach(GTK_GRID(grid), entry_answer, 2, i, 1, 1);
     }
 
-    char question_label_text[25];
-    snprintf(question_label_text, sizeof(question_label_text), "Question %d:", app_wdgts->current_questions + 1);
-    GtkWidget *label_question = gtk_label_new(question_label_text);
-    gtk_box_pack_start(GTK_BOX(app_wdgts->vbox), label_question, FALSE, FALSE, 5);
+    GtkWidget *save_button = gtk_button_new_with_label("Save");
+    g_signal_connect(save_button, "clicked", G_CALLBACK(save_file), data);
+    gtk_grid_attach(GTK_GRID(grid), save_button, 1, NUM_QUESTIONS, 1, 1);
 
-    app_wdgts->entry_questions[app_wdgts->current_questions] = gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(app_wdgts->vbox), app_wdgts->entry_questions[app_wdgts->current_questions], FALSE, FALSE, 5);
-
-    char answer_label_text[25];
-    snprintf(answer_label_text, sizeof(answer_label_text), "Réponse %d:", app_wdgts->current_questions + 1);
-    GtkWidget *label_answer = gtk_label_new(answer_label_text);
-    gtk_box_pack_start(GTK_BOX(app_wdgts->vbox), label_answer, FALSE, FALSE, 5);
-
-    app_wdgts->entry_answers[app_wdgts->current_questions] = gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(app_wdgts->vbox), app_wdgts->entry_answers[app_wdgts->current_questions], FALSE, FALSE, 5);
-
-    app_wdgts->current_questions++;
-    gtk_widget_show_all(app_wdgts->window);
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), grid, gtk_label_new("Create/Modify Form"));
 }
 
-void on_delete_button_clicked(GtkWidget *widget, AppWidgets *app_wdgts) {
-    if (app_wdgts->current_questions <= 0) {
-        g_print("Aucune question à supprimer.\n");
-        return;
-    }
+void setup_file_list(GtkWidget *notebook, AppData *data) {
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    data->file_list = gtk_list_box_new();
 
-    app_wdgts->current_questions--;
+    GtkWidget *load_button = gtk_button_new_with_label("Load");
+    GtkWidget *delete_button = gtk_button_new_with_label("Delete");
 
-    gtk_widget_destroy(app_wdgts->entry_questions[app_wdgts->current_questions]);
-    gtk_widget_destroy(app_wdgts->entry_answers[app_wdgts->current_questions]);
+    g_signal_connect(load_button, "clicked", G_CALLBACK(load_file), data);
+    g_signal_connect(delete_button, "clicked", G_CALLBACK(delete_file), data);
+
+    gtk_box_pack_start(GTK_BOX(box), data->file_list, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(box), load_button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), delete_button, FALSE, FALSE, 0);
+
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), box, gtk_label_new("File List"));
+
+    refresh_file_list(data);
 }
 
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
-    AppWidgets *app_wdgts = g_slice_new(AppWidgets);
-    app_wdgts->current_questions = 0;
-
+    AppData data;
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "Créer une Fiche de Révision");
-    gtk_window_set_default_size(GTK_WINDOW(window), 400, 800);
+    gtk_window_set_title(GTK_WINDOW(window), "Fiche App");
+    gtk_window_set_default_size(GTK_WINDOW(window), 600, 400);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    app_wdgts->window = window;
 
-    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-    gtk_container_add(GTK_CONTAINER(window), vbox);
-    app_wdgts->vbox = vbox;
+    GtkWidget *notebook = gtk_notebook_new();
+    data.notebook = notebook;
 
-    GtkWidget *label_title = gtk_label_new("Titre:");
-    gtk_box_pack_start(GTK_BOX(vbox), label_title, FALSE, FALSE, 5);
+    setup_page(notebook, &data);
+    setup_file_list(notebook, &data);
 
-    app_wdgts->entry_title = gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(vbox), app_wdgts->entry_title, FALSE, FALSE, 5);
-
-    for (int i = 0; i < 10; i++) {
-        on_add_button_clicked(NULL, app_wdgts);  // Ajouter initialement 10 questions
-    }
-
-    GtkWidget *button_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_pack_start(GTK_BOX(vbox), button_box, FALSE, FALSE, 5);
-
-    GtkWidget *validate_button = gtk_button_new_with_label("Valider");
-    gtk_box_pack_start(GTK_BOX(button_box), validate_button, TRUE, TRUE, 5);
-    g_signal_connect(validate_button, "clicked", G_CALLBACK(on_validate_button_clicked), app_wdgts);
-
-    GtkWidget *add_button = gtk_button_new_with_label("Ajouter");
-    gtk_box_pack_start(GTK_BOX(button_box), add_button, TRUE, TRUE, 5);
-    g_signal_connect(add_button, "clicked", G_CALLBACK(on_add_button_clicked), app_wdgts);
-
-    GtkWidget *delete_button = gtk_button_new_with_label("Supprimer");
-    gtk_box_pack_start(GTK_BOX(button_box), delete_button, TRUE, TRUE, 5);
-    g_signal_connect(delete_button, "clicked", G_CALLBACK(on_delete_button_clicked), app_wdgts);
-
+    gtk_container_add(GTK_CONTAINER(window), notebook);
     gtk_widget_show_all(window);
-    gtk_main();
 
-    g_slice_free(AppWidgets, app_wdgts);
+    gtk_main();
     return 0;
 }
-
