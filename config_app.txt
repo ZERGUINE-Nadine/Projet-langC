@@ -1,0 +1,19 @@
+# Paramètres de fenêtre
+window_title=Mon Application GTK
+window_width=800
+window_height=600
+window_resizable=true
+
+# Thème et apparence
+theme_name=Adwaita
+icon_theme_name=Papirus
+
+# Paramètres des widgets
+button_label=Cliquez-moi
+entry_placeholder=Entrez du texte ici
+font_size=12
+
+# Comportement de l'application
+auto_save_interval=10
+enable_logging=true
+
