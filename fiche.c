@@ -21,14 +21,12 @@ void clear_entries(AppData *data) {
 }
 
 void refresh_file_list(AppData *data) {
-    // Remove all existing rows from the list box
     GList *children = gtk_container_get_children(GTK_CONTAINER(data->file_list));
     for (GList *iter = children; iter != NULL; iter = g_list_next(iter)) {
         gtk_widget_destroy(GTK_WIDGET(iter->data));
     }
     g_list_free(children);
 
-    // Populate the list box with files
     DIR *dir = opendir(".");
     if (dir) {
         struct dirent *entry;
@@ -73,7 +71,6 @@ void load_file(GtkWidget *button, gpointer user_data) {
 void save_file(GtkWidget *button, gpointer user_data) {
     AppData *data = (AppData *)user_data;
 
-    // Generate a filename
     char filename[256];
     snprintf(filename, sizeof(filename), "fiche_%ld.txt", time(NULL));
 
