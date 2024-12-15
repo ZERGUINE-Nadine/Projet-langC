@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow" id="exam">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">Examen - Commencez votre test</property>
+    <property name="resizable">False</property>
+    <property name="window-position">center</property>
+    <property name="default-width">700</property>
+    <property name="default-height">600</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-left">20</property>
+        <property name="margin-right">20</property>
+        <property name="margin-top">20</property>
+        <property name="margin-bottom">20</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">20</property>
+
+        <!-- Menu principal -->
+        <child>
+          <object class="GtkMenuBar" id="menu_principal">
+            <property name="visible">True</property>
+
+            <!-- Menu Accueil -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Accueil</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <!-- Menu Fiches avec sous-menus -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Fiches</property>
+                <property name="visible">True</property>
+                <property name="submenu">
+                  <object class="GtkMenu"/>
+                </property>
+              </object>
+            </child>
+
+            <!-- Menu Déconnexion -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Déconnexion</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <!-- Nom d'utilisateur aligné à droite -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Utilisateur : Nom</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Label 'Commencez votre test' -->
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Commencez votre test</property>
+            <property name="xalign">0.5</property>
+            <attributes>
+              <attribute name="scale" value="1.5"/>
+            </attributes>
+          </object>
+        </child>
+
+        <!-- Label 'Concentrez-vous bien !' -->
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Concentrez-vous bien !</property>
+            <property name="xalign">0.5</property>
+          </object>
+        </child>
+
+        <!-- Label 'Question : Quel est votre nom ?' -->
+        <child>
+          <object class="GtkLabel" id="lbl_question">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Question : Quel est votre nom ?</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+
+        <!-- Champ de texte pour la réponse -->
+        <child>
+          <object class="GtkEntry" id="entry_reponse">
+            <property name="width-request">300</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="placeholder-text" translatable="yes">Votre réponse ici...</property>
+          </object>
+        </child>
+
+        <!-- Bouton 'Valider' -->
+        <child>
+          <object class="GtkButton" id="btn_valider">
+            <property name="label" translatable="yes">Valider</property>
+            <property name="width-request">100</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <signal name="clicked" handler="on_btn_valider_clicked" swapped="no"/>
+          </object>
+        </child>
+
+        <!-- Barre de progression -->
+        <child>
+          <object class="GtkProgressBar" id="progress_exam">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
