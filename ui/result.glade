@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="fenetre_resultats">
+    <property name="title" translatable="yes">Résultats</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="resizable">True</property>
+    <property name="window-position">center</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">10</property>
+        <property name="margin-left">20</property>
+        <property name="margin-right">20</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+
+        <!-- Menu principal -->
+        <child>
+          <object class="GtkMenuBar" id="menu_principal">
+            <property name="visible">True</property>
+
+            <!-- Menu Accueil -->
+            <child>
+              <object class="GtkMenuItem" id="accueil_menu_item">
+                <property name="label" translatable="yes">Accueil</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <!-- Menu À propos -->
+            <child>
+              <object class="GtkMenuItem" id="a_propos_menu_item">
+                <property name="label" translatable="yes">À propos</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <!-- Menu Examens avec sous-menus -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label" translatable="yes">Examens</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkMenu">
+                    <!-- Sous-menu Ajouter -->
+                    <child>
+                      <object class="GtkMenuItem" id="ajouter_examens">
+                        <property name="label" translatable="yes">Ajouter</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <!-- Sous-menu Supprimer -->
+                    <child>
+                      <object class="GtkMenuItem" id="supprimer_examens">
+                        <property name="label" translatable="yes">Supprimer</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <!-- Sous-menu Modifier -->
+                    <child>
+                      <object class="GtkMenuItem" id="modifier_examens">
+                        <property name="label" translatable="yes">Modifier</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <!-- Menu Résultats -->
+            <child>
+              <object class="GtkMenuItem" id="resultats_menu_item">
+                <property name="label" translatable="yes">Résultats</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <!-- Menu Déconnexion -->
+            <child>
+              <object class="GtkMenuItem" id="deconnexion_menu_item">
+                <property name="label" translatable="yes">Déconnexion</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <!-- Nom d'utilisateur aligné à droite -->
+            <child>
+              <object class="GtkMenuItem">
+                <property name="label">
+                  <markup><span foreground="blue">Utilisateur : Nom</span></markup>
+                </property>
+                <property name="visible">True</property>
+                <property name="right-justified">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Contenu principal -->
+        <child>
+          <!-- Carte contenant le pourcentage -->
+          <object class="GtkFrame" id="carte_resultat">
+            <property name="label" translatable="yes">Résultat obtenu</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin">20</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">
+                      <markup><span font="24" foreground="green"><b>85%</b></span></markup>
+                    </property>
+                    <property name="visible">True</property>
+                    <property name="halign">center</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Votre score total</property>
+                    <property name="visible">True</property>
+                    <property name="halign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Tableau des résultats -->
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkTreeView" id="tableau_resultats">
+                <property name="visible">True</property>
+                <columns>
+                  <object class="GtkTreeViewColumn" id="col_nom">
+                    <property name="title" translatable="yes">Nom</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="renderer_nom"/>
+                    </child>
+                  </object>
+                  <object class="GtkTreeViewColumn" id="col_score">
+                    <property name="title" translatable="yes">Score</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="renderer_score"/>
+                    </child>
+                  </object>
+                </columns>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Section des statistiques -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">20</property>
+            <property name="halign">center</property>
+            <property name="visible">True</property>
+            <!-- Carte Statistique 1 -->
+            <child>
+              <object class="GtkFrame">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Score moyen</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">
+                      <markup><b>75%</b></markup>
+                    </property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Carte Statistique 2 -->
+            <child>
+              <object class="GtkFrame">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Participants</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">
+                      <markup><b>120</b></markup>
+                    </property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Carte Statistique 3 -->
+            <child>
+              <object class="GtkFrame">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Taux de réussite</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">
+                      <markup><b>89%</b></markup>
+                    </property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Bouton Exporter les résultats -->
+        <child>
+          <object class="GtkButton" id="btn_exporter">
+            <property name="label" translatable="yes">Exporter les résultats</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </object>
+</interface>
+
+
+ 
