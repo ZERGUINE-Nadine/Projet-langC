@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include "../includes/config.h"
+#include "includes/config.h"
 
 void save_fiches_to_file() {
     FILE *file = fopen("fiches.txt", "w");

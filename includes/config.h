@@ -37,4 +37,4 @@ void show_exam(GtkWidget *widget, gpointer data);
 void load_fiches_from_file();
 void save_fiches_to_file();
 
-#endif // CONFIG_H
+#endif
