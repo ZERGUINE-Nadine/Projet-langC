@@ -5,6 +5,7 @@
 #include "includes/config.h"
 
 
+
 void start_exam(GtkWidget *widget, gpointer data);
 void check_answer(GtkWidget *widget, gpointer data);
 void submit_exam(GtkWidget *widget, gpointer data);
@@ -24,7 +25,6 @@ GList *answer_data_list = NULL;
 
 void show_exam(GtkWidget *widget, gpointer data) {
     GtkWidget *content_area = GTK_WIDGET(data);
-    GtkWidget *label;
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 
     GList *children = gtk_container_get_children(GTK_CONTAINER(content_area));
@@ -35,22 +35,25 @@ void show_exam(GtkWidget *widget, gpointer data) {
 
     gtk_container_add(GTK_CONTAINER(content_area), vbox);
 
-    
     GtkWidget *header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setup_header(header, content_area);
     gtk_box_pack_start(GTK_BOX(vbox), header, FALSE, FALSE, 0);
 
-    label = gtk_label_new("Examen - Commencez votre test");
+    GtkWidget *label = gtk_label_new("Examen - Commencez votre test");
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
-    // Sélection de la fiche pour l'examen
-    label = gtk_label_new("Sélectionnez une fiche pour l'examen");
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    if (fiche_count == 0) {
+        label = gtk_label_new("Aucune fiche disponible.");
+        gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    } else {
+        label = gtk_label_new("Sélectionnez une fiche pour l'examen");
+        gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
-    for (int i = 0; i < fiche_count; i++) {
-        GtkWidget *button = gtk_button_new_with_label(fiches[i].titre);
-        g_signal_connect(button, "clicked", G_CALLBACK(start_exam), GINT_TO_POINTER(i));
-        gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+        for (int i = 0; i < fiche_count; i++) {
+            GtkWidget *button = gtk_button_new_with_label(fiches[i].titre);
+            g_signal_connect(button, "clicked", G_CALLBACK(start_exam), GINT_TO_POINTER(i));
+            gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+        }
     }
 
     gtk_widget_show_all(content_area);
@@ -93,7 +96,6 @@ void start_exam(GtkWidget *widget, gpointer data) {
     gtk_entry_set_placeholder_text(GTK_ENTRY(entry), "Votre réponse ici...");
     gtk_box_pack_start(GTK_BOX(vbox), entry, FALSE, FALSE, 0);
 
-    // Stocker les informations de la question actuelle
     AnswerData *answer_data = g_malloc(sizeof(AnswerData));
     answer_data->fiche_index = fiche_index;
     answer_data->question_index = current_question_index;
@@ -122,7 +124,6 @@ void check_answer(GtkWidget *widget, gpointer data) {
 
     current_question_index++;
     if (current_question_index < MAX_QUESTIONS && fiches[fiche_index].questions[current_question_index].question != NULL) {
-    
         GtkWidget *content_area = GTK_WIDGET(gtk_widget_get_parent(widget));
         GtkWidget *label;
         GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
@@ -149,7 +150,7 @@ void check_answer(GtkWidget *widget, gpointer data) {
         }
         gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
-        entry = gtk_entry_new();
+        GtkWidget *entry = gtk_entry_new();
         gtk_entry_set_placeholder_text(GTK_ENTRY(entry), "Votre réponse ici...");
         gtk_box_pack_start(GTK_BOX(vbox), entry, FALSE, FALSE, 0);
 

@@ -4,8 +4,10 @@
 #include <gtk/gtk.h>
 #include "includes/config.h"
 
+
+
 void save_fiches_to_file() {
-    FILE *file = fopen("fiches.txt", "w");
+    FILE *file = fopen("mes_fiches/fiches.txt", "w");
     if (file != NULL) {
         for (int i = 0; i < fiche_count; i++) {
             fprintf(file, "Fiche: %s\n", fiches[i].titre);
@@ -21,7 +23,7 @@ void save_fiches_to_file() {
 }
 
 void load_fiches_from_file() {
-    FILE *file = fopen("fiches.txt", "r");
+    FILE *file = fopen("mes_fiches/fiches.txt", "r");
     if (file != NULL) {
         char line[256];
         fiche_count = 0;
@@ -50,7 +52,7 @@ void load_fiches_from_file() {
 
 void create_fiche(GtkWidget *widget, gpointer data) {
     if (fiche_count < MAX_FICHES) {
-        fiches[fiche_count].titre = g_strdup("Nouvelle Fiche");
+        fiches[fiche_count].titre = g_strdup("New File");
         for (int i = 0; i < MAX_QUESTIONS; i++) {
             fiches[fiche_count].questions[i].question = NULL;
             fiches[fiche_count].questions[i].reponse = NULL;
@@ -166,7 +168,6 @@ void show_fiches(GtkWidget *widget, gpointer data) {
 
     gtk_container_add(GTK_CONTAINER(content_area), vbox);
 
-    // Ajout de la barre de navigation
     GtkWidget *header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setup_header(header, content_area);
     gtk_box_pack_start(GTK_BOX(vbox), header, FALSE, FALSE, 0);
@@ -180,7 +181,7 @@ void show_fiches(GtkWidget *widget, gpointer data) {
         gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
         g_signal_connect(entry, "changed", G_CALLBACK(modify_fiche_title), GINT_TO_POINTER(i));
 
-        button = gtk_button_new_with_label("Supprimer");
+        button = gtk_button_new_with_label("Delete");
         gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
         g_signal_connect(button, "clicked", G_CALLBACK(delete_fiche), GINT_TO_POINTER(i));
 
@@ -228,4 +229,3 @@ void show_fiches(GtkWidget *widget, gpointer data) {
 
     gtk_widget_show_all(content_area);
 }
-
