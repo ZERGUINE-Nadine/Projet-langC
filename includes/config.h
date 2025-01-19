@@ -15,9 +15,6 @@ typedef struct Fiche{
     Question questions[MAX_QUESTIONS];
  } Fiche;
  
-typedef struct { 
-    char *name; char *email;
- } User;
  
 extern User user_data; 
 extern Fiche fiches[MAX_FICHES]; 
