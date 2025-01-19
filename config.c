@@ -7,8 +7,6 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600 ;
 
-User user_data;
-
 Fiche fiches[MAX_FICHES];
 int fiche_count = 0;
 
