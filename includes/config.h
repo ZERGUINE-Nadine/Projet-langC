@@ -1,6 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H 
-#define MAX_FICHES 100 
+#define MAX_FICHES 10 
 #define MAX_QUESTIONS 10 
 #define CONFIG_WINDOW_WIDTH 800 
 #define CONFIG_WINDOW_HEIGHT 600 
