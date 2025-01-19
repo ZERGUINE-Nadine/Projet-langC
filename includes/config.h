@@ -16,12 +16,10 @@ typedef struct Fiche{
  } Fiche;
  
  
-extern User user_data; 
 extern Fiche fiches[MAX_FICHES]; 
 extern int fiche_count; 
 
-void load_user_data(); 
-void save_user_info(); 
+
 void on_destroy(GtkWidget *widget, gpointer data); 
 void on_deconnexion_clicked(GtkWidget *widget, gpointer data); 
 void setup_header(GtkWidget *header, GtkWidget *content_area); 
