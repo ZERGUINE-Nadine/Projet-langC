@@ -4,8 +4,6 @@
 #include <gtk/gtk.h>
 #include "includes/config.h"
 
-
-
 void start_exam(GtkWidget *widget, gpointer data);
 void check_answer(GtkWidget *widget, gpointer data);
 void submit_exam(GtkWidget *widget, gpointer data);
@@ -19,8 +17,6 @@ typedef struct {
 int current_question_index = 0;
 int correct_answers = 0;
 GtkWidget *entry;
-
-
 GList *answer_data_list = NULL;
 
 void show_exam(GtkWidget *widget, gpointer data) {
@@ -29,7 +25,9 @@ void show_exam(GtkWidget *widget, gpointer data) {
 
     GList *children = gtk_container_get_children(GTK_CONTAINER(content_area));
     for (GList *iter = children; iter != NULL; iter = g_list_next(iter)) {
-        gtk_widget_destroy(GTK_WIDGET(iter->data));
+        if (GTK_IS_WIDGET(iter->data)) {
+            gtk_widget_destroy(GTK_WIDGET(iter->data));
+        }
     }
     g_list_free(children);
 
@@ -65,13 +63,15 @@ void start_exam(GtkWidget *widget, gpointer data) {
     correct_answers = 0;
     answer_data_list = NULL;
 
-    GtkWidget *content_area = GTK_WIDGET(gtk_widget_get_parent(widget));
+    GtkWidget *content_area = gtk_widget_get_toplevel(widget);
     GtkWidget *label;
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 
     GList *children = gtk_container_get_children(GTK_CONTAINER(content_area));
     for (GList *iter = children; iter != NULL; iter = g_list_next(iter)) {
-        gtk_widget_destroy(GTK_WIDGET(iter->data));
+        if (GTK_IS_WIDGET(iter->data)) {
+            gtk_widget_destroy(GTK_WIDGET(iter->data));
+        }
     }
     g_list_free(children);
 
@@ -80,7 +80,6 @@ void start_exam(GtkWidget *widget, gpointer data) {
     GtkWidget *header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setup_header(header, content_area);
     gtk_box_pack_start(GTK_BOX(vbox), header, FALSE, FALSE, 0);
-
 
     label = gtk_label_new("Commencez votre test\nConcentrez-vous bien !");
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
@@ -114,13 +113,22 @@ void check_answer(GtkWidget *widget, gpointer data) {
     GList *l;
     for (l = answer_data_list; l != NULL; l = l->next) {
         AnswerData *answer_data = (AnswerData *)l->data;
-        const gchar *user_answer = gtk_entry_get_text(GTK_ENTRY(answer_data->entry));
-        const gchar *correct_answer = fiches[answer_data->fiche_index].questions[answer_data->question_index].reponse;
+        if (GTK_IS_ENTRY(answer_data->entry)) {
+            const gchar *user_answer = gtk_entry_get_text(GTK_ENTRY(answer_data->entry));
+            const gchar *correct_answer = fiches[answer_data->fiche_index].questions[answer_data->question_index].reponse;
 
-        if (g_strcmp0(user_answer, correct_answer) == 0) {
-            correct_answers++;
+            GtkWidget *message;
+            if (g_strcmp0(user_answer, correct_answer) == 0) {
+                correct_answers++;
+                message = gtk_label_new("Bonne réponse !");
+            } else {
+                message = gtk_label_new("Mauvaise réponse.");
+            }
+            gtk_box_pack_start(GTK_BOX(gtk_widget_get_parent(answer_data->entry)), message, FALSE, FALSE, 0);
         }
     }
+
+    gtk_widget_show_all(gtk_widget_get_toplevel(widget));
 
     current_question_index++;
     if (current_question_index < MAX_QUESTIONS && fiches[fiche_index].questions[current_question_index].question != NULL) {
@@ -130,7 +138,9 @@ void check_answer(GtkWidget *widget, gpointer data) {
 
         GList *children = gtk_container_get_children(GTK_CONTAINER(content_area));
         for (GList *iter = children; iter != NULL; iter = g_list_next(iter)) {
-            gtk_widget_destroy(GTK_WIDGET(iter->data));
+            if (GTK_IS_WIDGET(iter->data)) {
+                gtk_widget_destroy(GTK_WIDGET(iter->data));
+            }
         }
         g_list_free(children);
 
@@ -172,14 +182,16 @@ void check_answer(GtkWidget *widget, gpointer data) {
 
         GList *children = gtk_container_get_children(GTK_CONTAINER(content_area));
         for (GList *iter = children; iter != NULL; iter = g_list_next(iter)) {
-            gtk_widget_destroy(GTK_WIDGET(iter->data));
+            if (GTK_IS_WIDGET(iter->data)) {
+                gtk_widget_destroy(GTK_WIDGET(iter->data));
+            }
         }
         g_list_free(children);
 
         gtk_container_add(GTK_CONTAINER(content_area), vbox);
         
         GtkWidget *header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-        setup_header(header, content_area);
+               setup_header(header, content_area);
         gtk_box_pack_start(GTK_BOX(vbox), header, FALSE, FALSE, 0);
 
         char score_text[50];

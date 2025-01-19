@@ -7,23 +7,9 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600 ;
 
-User user_data;
-
 Fiche fiches[MAX_FICHES];
 int fiche_count = 0;
 
-void load_user_data() {
-    user_data.name = g_strdup("John Doe");
-    user_data.email = g_strdup("john.doe@example.com");
-}
-
-void save_user_info() {
-    FILE *file = fopen("user_info.txt", "w");
-    if (file != NULL) {
-        fprintf(file, "Name:%s\nEmail:%s\n", user_data.name, user_data.email);
-        fclose(file);
-    }
-}
 
 void on_destroy(GtkWidget *widget, gpointer data) {
     gtk_main_quit();
