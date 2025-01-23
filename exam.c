@@ -108,7 +108,7 @@ void start_exam(GtkWidget *widget, gpointer data) {
     display_question(content_area, fiche_index);
 }
 
-// Check user's answer
+
 void check_answer(GtkWidget *widget, gpointer data) {
     int fiche_index = GPOINTER_TO_INT(data);
 
