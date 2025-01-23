@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../includes/postgres_client.h"
 #include "../includes/windows_utils.h"
-
+#include "includes/config.h"
 
 void on_login_button_clicked(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = GTK_BUILDER(user_data);
