@@ -112,6 +112,7 @@ int main(int argc, char *argv[]) {
     gtk_widget_show_all(window);
     gtk_main();
 
+
     for (int i = 0; i < MAX_FICHES; i++) {
         free(fiches[i].questions);
     }

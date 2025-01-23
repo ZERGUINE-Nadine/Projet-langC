@@ -1,8 +1,0 @@
-Fiche: New File2
-Fiche: New File
-Q1: Nouvelle Question
-R1: Nouvelle Réponse
-Q2: Nouvelle Question
-R2: Nouvelle Réponse
-Q3: Nouvelle Question
-R3: Nouvelle Réponse

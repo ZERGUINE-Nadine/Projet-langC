@@ -24,8 +24,8 @@ void on_deconnexion_clicked(GtkWidget *widget, gpointer data);
 void setup_header(GtkWidget *header, GtkWidget *content_area);
 void show_fiches(GtkWidget *widget, gpointer data);
 void show_exam(GtkWidget *widget, gpointer data);
-void load_fiches_from_file();
-void save_fiches_to_file();
+void save_fiches_file();
+void load_fiches_from_file() ;
 void read_config(const char *filename);
 
 #endif

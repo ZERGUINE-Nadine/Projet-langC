@@ -5,9 +5,8 @@
 #include "includes/config.h"
 
 
-
 void save_fiches_to_file() {
-    FILE *file = fopen("mes_fiches/fiches.txt", "w");
+    FILE *file = fopen("fiches.txt", "w");
     if (file != NULL) {
         for (int i = 0; i < fiche_count; i++) {
             fprintf(file, "Fiche: %s\n", fiches[i].titre);
@@ -19,11 +18,13 @@ void save_fiches_to_file() {
             }
         }
         fclose(file);
+    } else {
+        g_warning("Failed to open file for writing: fiches.txt");
     }
 }
 
 void load_fiches_from_file() {
-    FILE *file = fopen("mes_fiches/fiches.txt", "r");
+    FILE *file = fopen("fiches.txt", "r");
     if (file != NULL) {
         char line[256];
         fiche_count = 0;
@@ -190,7 +191,7 @@ void show_fiches(GtkWidget *widget, gpointer data) {
                 GtkWidget *qhbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
                 gtk_box_pack_start(GTK_BOX(vbox), qhbox, FALSE, FALSE, 0);
 
-                label = gtk_label_new("Question :");
+                label = gtk_label_new("Q :");
                 gtk_box_pack_start(GTK_BOX(qhbox), label, FALSE, FALSE, 0);
 
                 entry = gtk_entry_new();
